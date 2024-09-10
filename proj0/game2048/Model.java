@@ -141,45 +141,66 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
-
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
-        // 先实现移动，再补全score的逻辑
+        if (side != Side.NORTH) {
+            board.setViewingPerspective(side);
+        }
+
+        // move
         for (int c = board.size() - 1; c >= 0; c--) {
-            int existTile = 1;
             for (int r = board.size() - 2; r >= 0; r--) {
-                if (tile(c, r) == null) {
-                    continue;
-                }
-                // todo toMovedTile 好像可以是 curTile.next。 但都是私有方法，暂时不行
-                Tile curTile = tile(c, r);
-                Tile toMovedTile = tile(c, board.size() - 1 - existTile);
-
-                // 分条件去写move的参数，分别对应单纯移动和合并
-                // 有无merge过也要分条件
-                // only move
-                if (toMovedTile == null) {
-                    board.move(c, board.size() - 1 - existTile, curTile);
-
-                    existTile++;
-                    changed = true;
-                } else if (toMovedTile.value() == curTile.value()) {
-                    // merge
-                    board.move(c, board.size() - 1 - existTile, curTile);
-                    score += toMovedTile.value() * 2;
-                    existTile++;
-                    changed = true;
-                } else {
-                    // toMovedTile exist but not merge
-                    if ((toMovedTile.row() - curTile.row()) > 1) {
-                        board.move(c, board.size() - 2, curTile);
+                Tile currentTile = board.tile(c, r);
+                if (currentTile != null) {
+                    int newRow = r;
+                    // checks if there are empty spaces above a tile(c, r)
+                    while (newRow + 1 < board.size() && board.tile(c, newRow + 1) == null) {
+                        newRow++;
+                    }
+                    if (newRow != r) {
+                        board.move(c, newRow, currentTile);
                         changed = true;
                     }
-                    existTile += 2;
                 }
             }
         }
+
+        // merge 
+        for (int c = board.size() - 1; c >= 0; c--) {
+            for (int r = board.size() - 2; r >= 0; r--) {
+                Tile currentTile = board.tile(c, r);
+                Tile aboveTile = board.tile(c, r + 1);
+                if (currentTile != null && aboveTile != null && currentTile.value() == aboveTile.value()) {
+                    board.move(c, r + 1, currentTile);
+                    score += currentTile.value() * 2; // Update score
+                    changed = true;
+                }
+            }
+        }
+
+        // move again
+        for (int c = board.size() - 1; c >= 0; c--) {
+            for (int r = board.size() - 3; r >= 0; r--) {
+                Tile currentTile = board.tile(c, r);
+                if (currentTile != null) {
+                    int newRow = r;
+                    // checks if there are empty spaces above a tile(c, r)
+                    while (newRow + 1 < board.size() && board.tile(c, newRow + 1) == null) {
+                        newRow++;
+                    }
+                    if (newRow != r) {
+                        board.move(c, newRow, currentTile);
+                        changed = true;
+                    }
+                }
+            }
+        }
+
+        if (side != Side.NORTH) {
+            board.setViewingPerspective(Side.NORTH);
+        }
+
         checkGameOver();
         if (changed) {
             setChanged();
