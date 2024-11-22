@@ -23,6 +23,35 @@ public class TimeSLList {
 
     public static void timeGetLast() {
         // TODO: YOUR CODE HERE
+        // 先测试，最后再添加，外面一层循环就行
+        SLList<Integer> list = new SLList<>();
+        AList<Integer> Ns = new AList<>();
+        AList<Double> times = new AList<>();
+        AList<Integer> opCounts = new AList<>();
+        int opCount = 10000;
+        for (int i = 0; i < 8; i++) {
+            int N = 1000 * (int) Math.pow(2, i);
+            Ns.addLast(N);
+            opCounts.addLast(opCount);
+
+            int addCount = 0;
+            if (i == 0) {
+                addCount = N;
+            } else {
+                addCount = Ns.get(i - 1);
+            }
+            for (int j = 0; j < addCount; j++) {
+                list.addLast(j);
+            }
+
+            // System.out.println(list.size());
+            Stopwatch sw = new Stopwatch();
+            for (int j = 0; j < opCount; j++) {
+                list.getLast(); // 调用需要测试的函数
+            }
+            times.addLast(sw.elapsedTime());
+        }
+        printTimingTable(Ns, times, opCounts);
     }
 
 }
