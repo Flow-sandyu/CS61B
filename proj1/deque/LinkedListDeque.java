@@ -1,6 +1,10 @@
 package deque;
 
-public class LinkedListDeque<T> implements Deque<T> {
+import java.util.Iterator;
+
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T>  {
+
+
 
     private class StuffNode {
         public T item;
@@ -23,11 +27,11 @@ public class LinkedListDeque<T> implements Deque<T> {
         size = 0;
     }
 
-    public LinkedListDeque(T x) {
-        sentinel = new StuffNode(null, null, null);
-        sentinel.next = new StuffNode(x, sentinel, sentinel);
-        size = 1;
-    }
+    // public LinkedListDeque(T x) {
+    //     sentinel = new StuffNode(null, null, null);
+    //     sentinel.next = new StuffNode(x, sentinel, sentinel);
+    //     size = 1;
+    // }
 
     /**
      * Adds x to the front of the list.
@@ -43,12 +47,6 @@ public class LinkedListDeque<T> implements Deque<T> {
         size += 1;
     }
 
-    /**
-     * Returns the first item in the list.
-     */
-    public T getFirst() {
-        return sentinel.next.item;
-    }
 
     /**
      * Adds an item to the end of the list.
@@ -84,6 +82,14 @@ public class LinkedListDeque<T> implements Deque<T> {
         return false;
     }
 
+    public boolean equals(Object o) {
+
+        return false;
+    }
+
+    public Iterator<T> iterator() {
+        return null;
+    }
     public T removeFirst() {
         if (size == 0) {
             return null;
