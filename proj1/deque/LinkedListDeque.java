@@ -4,8 +4,6 @@ import java.util.Iterator;
 
 public class LinkedListDeque<T> implements Deque<T>, Iterable<T>  {
 
-
-
     private class StuffNode {
         public T item;
         public StuffNode prev;
@@ -75,21 +73,46 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>  {
         System.out.println();
     }
 
-    public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        }
-        return false;
-    }
-
+    // todo
     public boolean equals(Object o) {
-
-        return false;
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof ArrayDeque)) {
+            return false;
+        }
+        LinkedListDeque<T> other = (LinkedListDeque<T>) o;
+        if (size != other.size()) {
+            return false;
+        }   
+        StuffNode p = sentinel.next;
+        StuffNode q = other.sentinel.next;
+        for (int i = 0; i < size; i++) {
+            if (p.item != q.item){
+                return false;
+            }
+            p = p.next;
+            q = q.next;
+        }
+        return true;
     }
 
     public Iterator<T> iterator() {
-        return null;
+        return new LinkedListDequeIterator();
     }
+
+    private class LinkedListDequeIterator implements Iterator<T> {
+        private StuffNode current = sentinel.next;
+        public boolean hasNext() {
+            return current != sentinel;
+        }
+        public T next() {
+            T item = current.item;
+            current = current.next;
+            return item;
+        }
+    }
+    
     public T removeFirst() {
         if (size == 0) {
             return null;
