@@ -1,5 +1,6 @@
 package deque;
 
+import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -7,7 +8,45 @@ import java.util.Iterator;
 import static org.junit.Assert.*;
 
 /** Performs some basic linked list tests. */
-public class LinkedListDequeTest {
+public class  LinkedListDequeTest {
+
+    @Test
+    public void randomizedTest() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+        LinkedListDeque<Integer> lld2 = new LinkedListDeque<>();
+        int N = 5000;
+        for (int i = 0; i < N; i += 1) {
+            int operationNumber = StdRandom.uniform(0, 5);
+            if (operationNumber == 0) {
+                // addLast
+                int randVal = StdRandom.uniform(0, 100);
+                lld1.addLast(randVal);
+                lld2.addLast(randVal);
+            } else if (operationNumber == 1) {
+                if (lld1.size() == 0)
+                    continue;
+                // removeFirst
+                int firstL = lld1.removeFirst();
+                int firstB = lld2.removeFirst();
+                assertEquals(firstL, firstB);
+            } else if (operationNumber == 2) {
+                // addFirst
+                int randVal = StdRandom.uniform(0, 100);
+                lld1.addFirst(randVal);
+                lld2.addFirst(randVal); 
+            } else if (operationNumber == 3) {
+                if (lld1.size() == 0)
+                    continue;
+                // removeLast
+                int lastL = lld1.removeLast();
+                int lastB = lld2.removeLast();
+                assertEquals(lastL, lastB);
+            } else if (operationNumber == 4) {
+                // equals
+                assertTrue(lld1.equals(lld2));
+            }
+        }
+    }
 
     @Test
     /**
@@ -154,33 +193,24 @@ public class LinkedListDequeTest {
         lld1.addFirst(2);
         lld2.addFirst(2);
         assertTrue(lld1.equals(lld2));
+        lld1.removeFirst();
+        lld2.removeFirst();
+        assertTrue(lld1.equals(lld2));
     }
 
     @Test
-    public void aqLLDEqualsTest2() {
+    public void aqLldEqualsTest() {
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
         ArrayDeque<Integer> ad1 = new ArrayDeque<Integer>();
-        assertTrue(dqEquals(lld1, ad1));
+        assertEquals(lld1, ad1);
+        assertEquals(ad1, lld1);
         lld1.addFirst(1);
         ad1.addFirst(1);
-        assertTrue(dqEquals(lld1, ad1));
+        assertEquals(lld1, ad1);
+        assertEquals(ad1, lld1);
         lld1.addFirst(2);
         ad1.addFirst(2);
-        assertTrue(dqEquals(lld1, ad1));
-    }
-
-    public boolean dqEquals(LinkedListDeque linkedListDeque, ArrayDeque arrayDeque) {
-        if (linkedListDeque == null || arrayDeque == null) {
-            return false;
-        }
-        if (linkedListDeque.size() != arrayDeque.size()) {
-            return false;
-        }   
-        for (int i = 0; i < linkedListDeque.size(); i++) {
-            if (linkedListDeque.get(i) != arrayDeque.get(i)) {
-                return false;
-            }
-        }
-        return true;
+        assertEquals(lld1, ad1);
+        assertEquals(ad1, lld1);
     }
 }
