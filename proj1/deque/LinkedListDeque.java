@@ -5,11 +5,11 @@ import java.util.Iterator;
 public class LinkedListDeque<T> implements Deque<T>, Iterable<T>  {
 
     private class StuffNode {
-        public T item;
-        public StuffNode prev;
-        public StuffNode next;
+        private T item;
+        private StuffNode prev;
+        private StuffNode next;
 
-        public StuffNode(T i, StuffNode p, StuffNode n) {
+         StuffNode(T i, StuffNode p, StuffNode n) {
             item = i;
             prev = p;
             next = n;
@@ -22,6 +22,8 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>  {
 
     public LinkedListDeque() {
         sentinel = new StuffNode(null, null, null);
+        sentinel.next = sentinel;
+        sentinel.prev = sentinel;
         size = 0;
     }
 
@@ -35,13 +37,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>  {
      * Adds x to the front of the list.
      */
     public void addFirst(T x) {
-        StuffNode temp = sentinel.next;
-        sentinel.next = new StuffNode(x, sentinel, temp);
-        if (temp != null) {
-            temp.prev = sentinel.next;
-        } else {
-            sentinel.prev = sentinel.next;
-        }
+        StuffNode newNode = new StuffNode(x, sentinel, sentinel.next);
+        sentinel.next = newNode;
+        newNode.next.prev = newNode;
         size += 1;
     }
 
@@ -50,13 +48,9 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>  {
      * Adds an item to the end of the list.
      */
     public void addLast(T x) {
-        StuffNode temp = sentinel.prev;
-        sentinel.prev = new StuffNode(x, temp, sentinel);
-        if (temp != null) {
-            temp.next = sentinel.prev;
-        } else {
-            sentinel.next = sentinel.prev;
-        }
+        StuffNode newNode = new StuffNode(x, sentinel.prev, sentinel);
+        sentinel.prev = newNode;
+        newNode.prev.next = newNode;
         size += 1;
     }
 
@@ -78,7 +72,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>  {
         if (o == null) {
             return false;
         }
-        if (!(o instanceof ArrayDeque)) {
+        if (!(o instanceof LinkedListDeque)) {
             return false;
         }
         LinkedListDeque<T> other = (LinkedListDeque<T>) o;

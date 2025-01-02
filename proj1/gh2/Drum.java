@@ -2,6 +2,7 @@ package gh2;
 
 import deque.ArrayDeque;
 import deque.Deque;
+import deque.LinkedListDeque;
 
 public class Drum {
     /** Constants. Do not change. In case you're curious, the keyword final
@@ -16,7 +17,7 @@ public class Drum {
     /* Create a drum with the given frequency.  */
     public Drum(double frequency) {
         int capacity = (int) Math.round(SR / frequency);
-        buffer = new ArrayDeque<Double>(capacity);
+        buffer = new LinkedListDeque<>();
         for (int i = 0; i < capacity; i++) {
             buffer.addLast(0.0);
         }

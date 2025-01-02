@@ -1,6 +1,9 @@
 package deque;
 
 import org.junit.Test;
+
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 /** Performs some basic linked list tests. */
@@ -26,6 +29,8 @@ public class LinkedListDequeTest {
         // otherwise.
         assertEquals(1, lld1.size());
         assertFalse("lld1 should now contain 1 item", lld1.isEmpty());
+
+        // lld1.addFirst("prefront");
 
         lld1.addLast("middle");
         assertEquals(2, lld1.size());
@@ -129,5 +134,53 @@ public class LinkedListDequeTest {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
 
+    }
+
+    @Test
+    public void hasNextEmptyTest() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+        Iterator<Integer> iterator = lld1.iterator();
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void equalsTest() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+        LinkedListDeque<Integer> lld2 = new LinkedListDeque<Integer>();
+        assertTrue(lld1.equals(lld2));
+        lld1.addFirst(1);
+        lld2.addFirst(1);
+        assertTrue(lld1.equals(lld2));
+        lld1.addFirst(2);
+        lld2.addFirst(2);
+        assertTrue(lld1.equals(lld2));
+    }
+
+    @Test
+    public void aqLLDEqualsTest2() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+        ArrayDeque<Integer> ad1 = new ArrayDeque<Integer>();
+        assertTrue(dqEquals(lld1, ad1));
+        lld1.addFirst(1);
+        ad1.addFirst(1);
+        assertTrue(dqEquals(lld1, ad1));
+        lld1.addFirst(2);
+        ad1.addFirst(2);
+        assertTrue(dqEquals(lld1, ad1));
+    }
+
+    public boolean dqEquals(LinkedListDeque linkedListDeque, ArrayDeque arrayDeque) {
+        if (linkedListDeque == null || arrayDeque == null) {
+            return false;
+        }
+        if (linkedListDeque.size() != arrayDeque.size()) {
+            return false;
+        }   
+        for (int i = 0; i < linkedListDeque.size(); i++) {
+            if (linkedListDeque.get(i) != arrayDeque.get(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

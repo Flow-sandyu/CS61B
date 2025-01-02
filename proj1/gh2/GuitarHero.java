@@ -17,7 +17,7 @@ public class GuitarHero {
         int length = keyboard.length();
         GuitarString[] strings = new GuitarString[length];
         for (int i = 0; i < length; i++) {
-            double frequency = 440.0 * Math.pow(2, (i - 24) / 12.0);
+            double frequency = CONCERT_A * Math.pow(2, (i - 24) / 12.0);
             strings[i] = new GuitarString(frequency);
         }
 
@@ -28,8 +28,9 @@ public class GuitarHero {
                 char key = StdDraw.nextKeyTyped();
                 int index = keyboard.indexOf(key);
                 // Ensure the key is valid
-                if (index == -1)
+                if (index == -1) {
                     continue;
+                }
                 strings[index].pluck();
             }
 
